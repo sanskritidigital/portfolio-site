@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Mail, Send } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
+import { Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { portfolioData } from '../data/portfolio';
 
 const GithubIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
@@ -16,49 +17,117 @@ const LinkedinIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
   </svg>
 );
 
-const TwitterIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
-  </svg>
-);
+
+// Simple email regex validator
+const isValidEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
 
 export const Contact: React.FC = () => {
-  const { title, subtitle, email, github, linkedin, twitter } = portfolioData.contact;
-  
+  const { title, subtitle, email, github, linkedin } = portfolioData.contact;
+
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear field error on change
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validate = (): boolean => {
+    const newErrors: FormErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required.';
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required.';
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message cannot be empty.';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!validate()) return;
+
+    setStatus('submitting');
+    setErrorMessage('');
+
+    const serviceId  = import.meta.env.VITE_EMAILJS_SERVICE_ID  as string;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+    const publicKey  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY  as string;
+
+    // ── Debug: log loaded keys (remove after confirming) ──
+    console.log('[EmailJS] Service ID :', serviceId);
+    console.log('[EmailJS] Template ID:', templateId);
+    console.log('[EmailJS] Public Key :', publicKey);
+
+    if (!serviceId || serviceId === 'YOUR_SERVICE_ID') {
+      const msg = '⚠️ EmailJS keys are not configured yet. Open .env.local and replace the placeholder values.';
+      console.error(msg);
       setStatus('error');
+      setErrorMessage(msg);
       return;
     }
-    
-    setStatus('submitting');
-    
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name:  formData.name.trim(),
+          from_email: formData.email.trim(),
+          message:    formData.message.trim(),
+          to_email:   'sanskriti.workmail@gmail.com',
+        },
+        publicKey
+      );
+
+      console.log('[EmailJS] Success:', result.status, result.text);
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setStatus('idle'), 5000); // Reset status message after 5 seconds
-    }, 1200);
+      setErrors({});
+      setTimeout(() => setStatus('idle'), 6000);
+    } catch (err: unknown) {
+      // EmailJS wraps errors as { status, text }
+      const ejsErr = err as { status?: number; text?: string };
+      const detail = ejsErr?.text
+        ? `EmailJS error ${ejsErr.status}: ${ejsErr.text}`
+        : (err instanceof Error ? err.message : String(err));
+
+      console.error('[EmailJS] Send failed:', err);
+      setStatus('error');
+      setErrorMessage(detail || 'Something went wrong. Please try again or email me directly.');
+    }
   };
 
   return (
     <section id="contact" className="reveal">
       <div className="container">
         <h2>{title}</h2>
-        
+
         <div className="contact-container">
+          {/* Info Panel */}
           <div className="contact-info-panel">
             <p className="contact-subtitle">{subtitle}</p>
-            
+
             <div className="contact-details">
               <a href={`mailto:${email}`} className="contact-item">
                 <div className="contact-icon-box">
@@ -67,7 +136,7 @@ export const Contact: React.FC = () => {
                 <span>{email}</span>
               </a>
             </div>
-            
+
             <div className="social-links">
               {github && (
                 <a href={github} target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
@@ -79,75 +148,88 @@ export const Contact: React.FC = () => {
                   <LinkedinIcon size={20} />
                 </a>
               )}
-              {twitter && (
-                <a href={twitter} target="_blank" rel="noopener noreferrer" className="social-link" title="Twitter / X">
-                  <TwitterIcon size={20} />
-                </a>
-              )}
             </div>
           </div>
-          
-          <form onSubmit={handleSubmit} className="contact-form">
+
+          {/* Contact Form */}
+          <form ref={formRef} onSubmit={handleSubmit} className="contact-form" noValidate>
+
+            {/* Name */}
             <div className="form-group">
               <label htmlFor="form-name" className="form-label">Name</label>
               <input
                 type="text"
                 id="form-name"
                 name="name"
-                className="form-input"
+                className={`form-input${errors.name ? ' input-error' : ''}`}
                 value={formData.name}
                 onChange={handleChange}
-                required
                 placeholder="Your Name"
+                autoComplete="name"
               />
+              {errors.name && <span className="field-error">{errors.name}</span>}
             </div>
-            
+
+            {/* Email */}
             <div className="form-group">
               <label htmlFor="form-email" className="form-label">Email</label>
               <input
                 type="email"
                 id="form-email"
                 name="email"
-                className="form-input"
+                className={`form-input${errors.email ? ' input-error' : ''}`}
                 value={formData.email}
                 onChange={handleChange}
-                required
                 placeholder="your.email@example.com"
+                autoComplete="email"
               />
+              {errors.email && <span className="field-error">{errors.email}</span>}
             </div>
-            
+
+            {/* Message */}
             <div className="form-group">
               <label htmlFor="form-message" className="form-label">Message</label>
               <textarea
                 id="form-message"
                 name="message"
-                className="form-textarea"
+                className={`form-textarea${errors.message ? ' input-error' : ''}`}
                 value={formData.message}
                 onChange={handleChange}
-                required
                 placeholder="Hello! Let's talk about..."
               />
+              {errors.message && <span className="field-error">{errors.message}</span>}
             </div>
 
+            {/* Success Banner */}
             {status === 'success' && (
-              <div className="form-status success" id="form-success-msg">
-                Thank you! Your message has been sent successfully.
+              <div className="form-status success" id="form-success-msg" role="alert">
+                <CheckCircle size={18} />
+                Message sent! I'll get back to you soon.
               </div>
             )}
-            
+
+            {/* Error Banner */}
             {status === 'error' && (
-              <div className="form-status error" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'hsl(0, 84%, 60%)', border: '1px solid rgba(239, 68, 68, 0.2)' }} id="form-error-msg">
-                Please fill in all fields before submitting.
+              <div className="form-status form-status-error" id="form-error-msg" role="alert">
+                <AlertCircle size={18} />
+                {errorMessage || 'Please fill in all fields correctly before submitting.'}
               </div>
             )}
-            
+
             <button
               type="submit"
               className="btn btn-primary"
               disabled={status === 'submitting'}
               style={{ alignSelf: 'flex-start' }}
             >
-              {status === 'submitting' ? 'Sending...' : 'Send Message'} <Send size={16} />
+              {status === 'submitting' ? (
+                <>
+                  <span className="sending-spinner" aria-hidden="true"></span>
+                  Sending…
+                </>
+              ) : (
+                <>Send Message <Send size={16} /></>
+              )}
             </button>
           </form>
         </div>

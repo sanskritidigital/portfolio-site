@@ -53,13 +53,15 @@ export interface PortfolioData {
   };
   projects: Project[];
   experience: Experience[];
+  certifications: Experience[];
   contact: {
     title: string;
     subtitle: string;
     email: string;
     github?: string;
     linkedin?: string;
-    twitter?: string;
+    naukri?: string;
+    indeed?: string;
   };
 }
 
@@ -70,6 +72,7 @@ export const portfolioData: PortfolioData = {
       { label: "About", href: "#about" },
       { label: "Projects", href: "#projects" },
       { label: "Education", href: "#education" },
+      { label: "Certifications", href: "#certifications" },
       { label: "Contact", href: "#contact" }
     ]
   },
@@ -96,7 +99,7 @@ export const portfolioData: PortfolioData = {
       },
       {
         category: "AI & Creative Tools",
-        items: ["Gemini", "ChatGPT", "Canva", "Image Generation", "Video Generation", "Prompt Engineering"]
+        items: ["Gemini", "ChatGPT", "Canva", "Image Generation", "Video Generation", "Prompt Engineering", "Antigravity", "Claude", "Speckit", "Figma"]
       },
       {
         category: "Soft Skills",
@@ -107,7 +110,7 @@ export const portfolioData: PortfolioData = {
   projects: [
     {
       title: "Nike India Brand Kit",
-      description: "An insight-led, plain-language strategic brand playbook for Nike India. Outlines core brand philosophy, visual & vocal systems (palette, typography), target consumer personas (Arjun, Priya, Rohan), and end-to-end customer journey maps to drive membership growth.",
+      description: "Strategic brand playbook for Nike India covering brand philosophy, visual identity, and customer personas to drive membership growth.",
       thumbnail: project1Img,
       tags: ["Brand Strategy", "Market Research", "Consumer Personas", "Journey Mapping"],
       liveUrl: "",
@@ -115,7 +118,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       title: "Nykaa Digital Marketing Audit",
-      description: "A comprehensive digital presence analysis and strategic marketing review for Nykaa, India's premier beauty and lifestyle e-commerce platform. Evaluates social media presence, website & app user experience strengths, content funnel, and outlines a strategic SWOT analysis.",
+      description: "Digital presence audit for Nykaa covering social media, UX, content strategy, and a full SWOT analysis.",
       thumbnail: project2Img,
       tags: ["Digital Audit", "Marketing Strategy", "SWOT Analysis", "UX Review"],
       liveUrl: "",
@@ -123,7 +126,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       title: "Vitara Brand Identity & Positioning",
-      description: "A comprehensive brand identity and strategic positioning playbook for Vitara Beauty, a conscious minimalist skincare line. Outlines brand archetypes (The Sage & The Caregiver), strategic positioning statements, brand voice guidelines, and a nature-imbued color palette.",
+      description: "Brand identity and positioning playbook for Vitara Beauty, covering brand archetypes, voice guidelines, and color palette.",
       thumbnail: project3Img,
       tags: ["Brand Identity", "Skincare Marketing", "Brand Archetype", "Strategic Voice"],
       liveUrl: "",
@@ -132,23 +135,33 @@ export const portfolioData: PortfolioData = {
   ],
   experience: [
     {
-      role: "Digital Marketing Student",
-      company: "Techpath",
-      duration: "2025 - Present",
-      description: [
-        "Pursuing a Diploma in Digital Marketing, mastering social media strategy, SEO, and paid campaigns.",
-        "Leveraging AI tools (Gemini, ChatGPT) for automated copywriting and content ideation.",
-        "Analyzing real-world case studies for brand strategy and competitive positioning."
-      ]
+      role: "BBA in General Studies",
+      company: "Chandigarh University (Online/Correspondence)",
+      duration: "2026 - Present",
+      description: []
     },
     {
-      role: "BBA in General Studies Student",
-      company: "Chandigarh University (Online/Correspondence)",
-      duration: "2023 - Present",
+      role: "12th Grade",
+      company: "NIOS, Arts Stream",
+      duration: "Pass Year 2026",
+      description: []
+    },
+    {
+      role: "10th Grade",
+      company: "ICSE, St John's School Katsila, Chandauli",
+      duration: "Pass Year 2023",
+      description: []
+    }
+  ],
+  certifications: [
+    {
+      role: "Digital Marketing Trainee",
+      company: "Techpath",
+      duration: "2026 - Present",
       description: [
-        "Developing a foundational understanding of business operations, consumer behavior, and organizational communication.",
-        "Applying marketing theories and statistical methods to mock business research projects.",
-        "Strengthening critical thinking, goal setting, and presentation skills."
+        "Building hands-on expertise in SEO, social media strategy, content creation, and brand positioning through practical learning and real-world projects.",
+        "Leveraging Generative AI tools such as Gemini and ChatGPT for content ideation, copywriting, image/video generation, and AI-powered workflows.",
+        "Exploring SpecKit-based automation to streamline digital marketing processes while analyzing brands, competitors, customer journeys, and growth strategies."
       ]
     }
   ],
@@ -158,6 +171,7 @@ export const portfolioData: PortfolioData = {
     email: "sanskriti.workmail@gmail.com",
     github: "https://github.com",
     linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com"
+    naukri: "https://www.naukri.com/mnjuser/profile?id=&altresid",
+    indeed: "https://indeed.com"
   }
 };

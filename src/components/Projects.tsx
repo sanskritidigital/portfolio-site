@@ -46,7 +46,7 @@ export const Projects: React.FC = () => {
                 </div>
                 
                 <div className="project-links">
-                  {project.liveUrl && (
+                  {project.liveUrl ? (
                     <a 
                       href={project.liveUrl} 
                       target="_blank" 
@@ -54,6 +54,13 @@ export const Projects: React.FC = () => {
                       className="project-link"
                     >
                       <ExternalLink size={16} /> Live Demo
+                    </a>
+                  ) : (
+                    <a 
+                      href="#contact" 
+                      className="project-link"
+                    >
+                      View Details →
                     </a>
                   )}
                   {project.githubUrl && (

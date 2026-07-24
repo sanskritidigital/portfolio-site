@@ -1,5 +1,7 @@
 import React from 'react';
 import { ArrowRight, Mail } from 'lucide-react';
+import { SiGithub, SiIndeed } from 'react-icons/si';
+import { FaLinkedin } from 'react-icons/fa';
 import { portfolioData } from '../data/portfolio';
 import profileImg from '../assets/profile.png';
 
@@ -53,17 +55,19 @@ export const Hero: React.FC = () => {
           {/* Word-by-word reveal header */}
           <h1 className="hero-name">
             {titleWords.map((word, idx) => (
-              <span 
-                key={idx} 
-                className="reveal-word" 
-                style={{ animationDelay: `${0.15 + idx * 0.12}s` }}
-              >
-                {word === "Sanskriti" || word === "Singh" ? (
-                  <span className="text-gradient">{word} </span>
-                ) : (
-                  word + " "
-                )}
-              </span>
+              <React.Fragment key={idx}>
+                <span 
+                  className="reveal-word" 
+                  style={{ animationDelay: `${0.15 + idx * 0.12}s` }}
+                >
+                  {word === "Sanskriti" || word === "Singh" ? (
+                    <span className="text-gradient">{word}</span>
+                  ) : (
+                    word
+                  )}
+                </span>
+                {idx < titleWords.length - 1 && ' '}
+              </React.Fragment>
             ))}
           </h1>
 
@@ -78,6 +82,57 @@ export const Hero: React.FC = () => {
             <a href={ctaSecondary.href} className="btn btn-secondary">
               {ctaSecondary.label} <Mail size={18} />
             </a>
+          </div>
+
+          <div className="hero-socials animate-hero-load delay-3">
+            {portfolioData.contact.linkedin && (
+              <a 
+                href={portfolioData.contact.linkedin} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hero-social-link linkedin" 
+                title="LinkedIn"
+                aria-label="LinkedIn Profile"
+              >
+                <FaLinkedin size={20} />
+              </a>
+            )}
+            {portfolioData.contact.github && (
+              <a 
+                href={portfolioData.contact.github} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hero-social-link github" 
+                title="GitHub"
+                aria-label="GitHub Profile"
+              >
+                <SiGithub size={20} />
+              </a>
+            )}
+            {portfolioData.contact.naukri && (
+              <a 
+                href={portfolioData.contact.naukri} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hero-social-link hero-social-link-img naukri" 
+                title="Naukri"
+                aria-label="Naukri Profile"
+              >
+                <img src="/icons/naukri.png" alt="Naukri" className="naukri-icon-img" />
+              </a>
+            )}
+            {portfolioData.contact.indeed && (
+              <a 
+                href={portfolioData.contact.indeed} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hero-social-link indeed" 
+                title="Indeed"
+                aria-label="Indeed Profile"
+              >
+                <SiIndeed size={20} />
+              </a>
+            )}
           </div>
         </div>
 

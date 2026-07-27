@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { portfolioData } from '../data/portfolio';
+import { PdfModal } from './PdfModal';
 
 const GithubIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
   <svg
@@ -20,6 +21,7 @@ const GithubIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
 
 export const Projects: React.FC = () => {
   const projects = portfolioData.projects;
+  const [activePdf, setActivePdf] = useState<{ url: string; title: string } | null>(null);
 
   return (
     <section id="projects" className="reveal">
@@ -52,8 +54,14 @@ export const Projects: React.FC = () => {
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="project-link"
+                      onClick={(e) => {
+                        if (project.liveUrl && project.liveUrl.toLowerCase().endsWith('.pdf')) {
+                          e.preventDefault();
+                          setActivePdf({ url: project.liveUrl, title: project.title });
+                        }
+                      }}
                     >
-                      <ExternalLink size={16} /> Live Demo
+                      <ExternalLink size={16} /> {project.liveUrlText || "Live Demo"}
                     </a>
                   ) : (
                     <a 
@@ -79,6 +87,12 @@ export const Projects: React.FC = () => {
           ))}
         </div>
       </div>
+      <PdfModal 
+        isOpen={activePdf !== null} 
+        onClose={() => setActivePdf(null)} 
+        pdfUrl={activePdf?.url || ''} 
+        title={activePdf?.title || ''} 
+      />
     </section>
   );
 };

@@ -23,13 +23,22 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
         </a>
 
         <ul className={`nav-links ${mobileMenuOpen ? 'mobile-active' : ''}`}>
-          {links.map((link, index) => (
-            <li key={index}>
-              <a href={link.href} className="nav-link" onClick={handleLinkClick}>
-                {link.label}
-              </a>
-            </li>
-          ))}
+          {links.map((link, index) => {
+            const isExternal = link.href.includes('.pdf') || link.href.startsWith('http');
+            return (
+              <li key={index}>
+                <a 
+                  href={link.href} 
+                  className="nav-link" 
+                  onClick={handleLinkClick}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="nav-actions">

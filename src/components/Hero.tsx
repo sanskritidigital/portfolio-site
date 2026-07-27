@@ -1,7 +1,7 @@
 import React from 'react';
-import { ArrowRight, Mail } from 'lucide-react';
-import { SiGithub, SiIndeed } from 'react-icons/si';
-import { FaLinkedin } from 'react-icons/fa';
+import { ArrowRight } from 'lucide-react';
+import { SiGithub } from 'react-icons/si';
+import { FaLinkedin, FaFileAlt, FaWhatsapp } from 'react-icons/fa';
 import { portfolioData } from '../data/portfolio';
 import profileImg from '../assets/profile.png';
 
@@ -79,59 +79,61 @@ export const Hero: React.FC = () => {
             <a href={ctaPrimary.href} className="btn btn-primary">
               {ctaPrimary.label} <ArrowRight size={18} />
             </a>
-            <a href={ctaSecondary.href} className="btn btn-secondary">
-              {ctaSecondary.label} <Mail size={18} />
+            <a 
+              href={ctaSecondary.href} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-secondary"
+            >
+              {ctaSecondary.label} <FaWhatsapp size={18} />
             </a>
           </div>
 
           <div className="hero-socials animate-hero-load delay-3">
             {portfolioData.contact.linkedin && (
-              <a 
-                href={portfolioData.contact.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="hero-social-link linkedin" 
-                title="LinkedIn"
-                aria-label="LinkedIn Profile"
-              >
-                <FaLinkedin size={20} />
-              </a>
+              <div className="hero-social-item">
+                <a 
+                  href={portfolioData.contact.linkedin} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hero-social-link linkedin" 
+                  title="LinkedIn"
+                  aria-label="LinkedIn Profile"
+                >
+                  <FaLinkedin size={20} />
+                </a>
+                <span className="hero-social-label linkedin">linkedin</span>
+              </div>
             )}
             {portfolioData.contact.github && (
-              <a 
-                href={portfolioData.contact.github} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="hero-social-link github" 
-                title="GitHub"
-                aria-label="GitHub Profile"
-              >
-                <SiGithub size={20} />
-              </a>
+              <div className="hero-social-item">
+                <a 
+                  href={portfolioData.contact.github} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hero-social-link github" 
+                  title="GitHub"
+                  aria-label="GitHub Profile"
+                >
+                  <SiGithub size={20} />
+                </a>
+                <span className="hero-social-label github">github</span>
+              </div>
             )}
-            {portfolioData.contact.naukri && (
-              <a 
-                href={portfolioData.contact.naukri} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="hero-social-link hero-social-link-img naukri" 
-                title="Naukri"
-                aria-label="Naukri Profile"
-              >
-                <img src="/icons/naukri.png" alt="Naukri" className="naukri-icon-img" />
-              </a>
-            )}
-            {portfolioData.contact.indeed && (
-              <a 
-                href={portfolioData.contact.indeed} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="hero-social-link indeed" 
-                title="Indeed"
-                aria-label="Indeed Profile"
-              >
-                <SiIndeed size={20} />
-              </a>
+            {portfolioData.contact.resume && (
+              <div className="hero-social-item">
+                <a 
+                  href={portfolioData.contact.resume} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hero-social-link resume" 
+                  title="Resume"
+                  aria-label="Resume"
+                >
+                  <FaFileAlt size={20} />
+                </a>
+                <span className="hero-social-label resume">resume</span>
+              </div>
             )}
           </div>
         </div>

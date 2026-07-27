@@ -31,18 +31,51 @@ export const Experience: React.FC = () => {
                   
                   {/* Glassmorphic Card content wrapper */}
                   <div className={`timeline-card ${(!exp.description || exp.description.length === 0) ? 'compact-card' : ''}`}>
-                    <div className="timeline-card-header">
-                      <div className="timeline-card-title-group">
+                    <div className="timeline-card-header education-card-header">
+                      <div className="timeline-header-top-row">
                         <span className="timeline-role">{exp.role}</span>
-                        <div className="timeline-institution">
-                          <span className="timeline-institution-icon" aria-hidden="true">
-                            {getInstitutionIcon(index)}
-                          </span>
-                          <span className="timeline-company">{exp.company}</span>
-                        </div>
+                        <span className="timeline-duration-badge">{exp.duration}</span>
                       </div>
-                      <span className="timeline-duration-badge">{exp.duration}</span>
+                      <div className="timeline-institution">
+                        <span className="timeline-institution-icon" aria-hidden="true">
+                          {exp.logo ? (
+                            <img
+                              src={exp.logo}
+                              alt={`${exp.company} logo`}
+                              className="company-logo-inline"
+                              style={{ height: '16px' }}
+                            />
+                          ) : (
+                            getInstitutionIcon(index)
+                          )}
+                        </span>
+                        <span className="timeline-company">
+                          {exp.companyUrl ? (
+                            <a
+                              href={exp.companyUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="company-link"
+                            >
+                              <span>{exp.company}</span>
+                            </a>
+                          ) : (
+                            exp.company
+                          )}
+                        </span>
+                      </div>
                     </div>
+                    {exp.skills && exp.skills.length > 0 && (
+                      <div className="flex flex-row education-skills-container">
+                        {exp.skills.map((skill, sIdx) => (
+                          <span key={sIdx} className="education-skill-tag text-xs">
+                            <span className="skill-tag-dot" aria-hidden="true"></span>
+                            <span className="full-text">{skill.name}</span>
+                            <span className="short-text">{skill.shortName}</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -61,9 +94,31 @@ export const Experience: React.FC = () => {
                         <span className="timeline-role">{cert.role}</span>
                         <div className="timeline-institution">
                           <span className="timeline-institution-icon" aria-hidden="true">
-                            <Award size={16} />
+                            {cert.logo ? (
+                              <img
+                                src={cert.logo}
+                                alt={`${cert.company} logo`}
+                                className="company-logo-inline"
+                                style={{ height: '16px' }}
+                              />
+                            ) : (
+                              <Award size={16} />
+                            )}
                           </span>
-                          <span className="timeline-company">{cert.company}</span>
+                          <span className="timeline-company">
+                            {cert.companyUrl ? (
+                              <a
+                                href={cert.companyUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="company-link"
+                              >
+                                <span>{cert.company}</span>
+                              </a>
+                            ) : (
+                              cert.company
+                            )}
+                          </span>
                         </div>
                       </div>
                       <span className="timeline-duration-badge">{cert.duration}</span>

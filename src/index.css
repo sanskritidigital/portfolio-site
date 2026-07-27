@@ -810,9 +810,41 @@ body.light-mode .hero-photo-glow {
 
 .hero-socials {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1.8rem;
+  align-items: flex-start;
+}
+
+.hero-social-item {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-social-label {
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+  transition: color var(--transition-speed) var(--transition-ease);
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.hero-social-item:hover .hero-social-label.linkedin {
+  color: #0A66C2;
+}
+
+.hero-social-item:hover .hero-social-label.github {
+  color: #FFFFFF;
+}
+
+.light-mode .hero-social-item:hover .hero-social-label.github {
+  color: #181717;
+}
+
+.hero-social-item:hover .hero-social-label.resume {
+  color: var(--color-accent-primary);
 }
 
 .hero-social-link {
@@ -867,15 +899,17 @@ body.light-mode .hero-photo-glow {
   border-color: rgba(24, 23, 23, 0.18);
 }
 
-.hero-social-link.naukri {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(31, 95, 168, 0.25);
+.hero-social-link.resume {
+  color: var(--color-accent-primary);
+  border-color: rgba(242, 184, 198, 0.25);
 }
 
-.hero-social-link.indeed {
-  color: #2164F3;
-  border-color: rgba(33, 100, 243, 0.25);
+.light-mode .hero-social-link.resume {
+  color: var(--color-accent-primary);
+  border-color: rgba(232, 93, 93, 0.25);
 }
+
+
 
 /* Brand Specific Hover Effects */
 .hero-social-link:hover {
@@ -900,17 +934,19 @@ body.light-mode .hero-photo-glow {
   box-shadow: 0 0 15px rgba(24, 23, 23, 0.25);
 }
 
-.hero-social-link.naukri:hover {
-  background: rgba(31, 95, 168, 0.15);
-  border-color: #1F5FA8;
-  box-shadow: 0 0 15px rgba(31, 95, 168, 0.4);
+.hero-social-link.resume:hover {
+  background: rgba(242, 184, 198, 0.15);
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 15px rgba(242, 184, 198, 0.4);
 }
 
-.hero-social-link.indeed:hover {
-  background: rgba(33, 100, 243, 0.15);
-  border-color: #2164F3;
-  box-shadow: 0 0 15px rgba(33, 100, 243, 0.4);
+.light-mode .hero-social-link.resume:hover {
+  background: rgba(232, 93, 93, 0.15);
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 15px rgba(232, 93, 93, 0.4);
 }
+
+
 
 @media (max-width: 900px) {
   .hero-socials {
@@ -1342,7 +1378,89 @@ body.light-mode .about-bg-glow {
 }
 
 .timeline-card.compact-card {
-  padding: 0.95rem 1.4rem;
+  padding: 0.55rem 1.4rem;
+}
+
+/* Flexbox utilities requested by user layout requirements */
+.flex {
+  display: flex;
+}
+.flex-row {
+  flex-direction: row;
+}
+
+/* Education Timeline Skill Tags */
+.education-skills-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.text-xs {
+  font-size: 0.72rem;
+}
+
+.education-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: 0.18rem 0.45rem;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  transition: all var(--transition-speed) var(--transition-ease);
+  white-space: nowrap;
+}
+
+.education-skill-tag .skill-tag-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-accent-primary);
+  transition: background-color var(--transition-speed) var(--transition-ease);
+}
+
+.education-skill-tag:hover {
+  background: var(--color-accent-gradient);
+  color: white !important;
+  border-color: transparent;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--shadow-glow);
+}
+
+.education-skill-tag:hover .skill-tag-dot {
+  background-color: white;
+}
+
+/* Shorten text / hide tags for narrow layouts to keep elements on a single row */
+.education-skill-tag .short-text {
+  display: none;
+}
+.education-skill-tag .full-text {
+  display: inline;
+}
+
+@media (max-width: 480px) {
+  .education-skills-container {
+    flex-wrap: wrap; /* Fallback on extremely small screens if absolutely necessary */
+  }
+  .education-skill-tag .full-text {
+    display: none;
+  }
+  .education-skill-tag .short-text {
+    display: inline;
+  }
+}
+
+@media (max-width: 380px) {
+  .education-skill-tag:nth-child(3) {
+    display: none;
+  }
 }
 
 .timeline-card.compact-card .timeline-card-header {
@@ -1391,6 +1509,18 @@ body.light-mode .about-bg-glow {
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.education-card-header {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.timeline-header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .timeline-card-title-group {
@@ -1742,5 +1872,251 @@ footer {
   .timeline-role-comp {
     flex-direction: column;
     gap: 0.2rem;
+  }
+}
+
+/* Company Logo and Link styles */
+.company-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  transition: opacity 0.2s ease, text-decoration 0.2s ease;
+}
+
+.company-link:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+.company-logo-inline {
+  height: 14px;
+  width: auto;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* PDF Modal Styles */
+.pdf-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.pdf-modal-container {
+  width: 90%;
+  max-width: 1100px;
+  height: 85vh;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow), var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pdf-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-surface);
+}
+
+.pdf-modal-title {
+  margin-bottom: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50%;
+}
+
+.pdf-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.pdf-modal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-speed) var(--transition-ease);
+}
+
+.pdf-modal-btn:hover {
+  background-color: var(--color-border);
+  color: var(--color-accent-primary);
+}
+
+.pdf-modal-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-speed) var(--transition-ease);
+}
+
+.pdf-modal-close-btn:hover {
+  background-color: rgba(232, 93, 93, 0.1);
+  color: var(--color-accent-primary);
+}
+
+.pdf-modal-body {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background-color: #525659; /* Standard PDF viewer background for seamless blend if loading */
+  position: relative;
+}
+
+.pdf-modal-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pdf-modal-container {
+    width: 95%;
+    height: 90vh;
+  }
+  .pdf-modal-btn span {
+    display: none; /* Hide text, keep only icon for mobile */
+  }
+  .pdf-modal-title {
+    max-width: 60%;
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Resume Section Styles */
+.resume-section {
+  position: relative;
+  padding: var(--spacing-xxl) 0;
+  background-color: var(--color-bg-base);
+}
+
+.resume-actions-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.resume-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0.8rem 1.6rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all var(--transition-speed) var(--transition-ease);
+}
+
+.resume-preview-wrapper {
+  width: 100%;
+  padding: 0 var(--spacing-md);
+  display: flex;
+  justify-content: center;
+}
+
+.resume-preview-container {
+  width: 100%;
+  max-width: 850px;
+  aspect-ratio: 1 / 1.4142; /* A4 aspect ratio */
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--glass-shadow), var(--shadow-lg);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resume-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Adjustments for mobile viewports to prevent overflow and maintain usability */
+@media (max-width: 600px) {
+  .resume-section {
+    padding: var(--spacing-xl) 0;
+  }
+  .resume-actions-container {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto var(--spacing-lg) auto;
+  }
+  .resume-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .resume-preview-container {
+    border-radius: 12px;
   }
 }
